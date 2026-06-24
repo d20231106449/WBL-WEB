@@ -1,0 +1,46 @@
+<?php
+
+return [
+    'after_or_equal' => 'Medan :attribute mestilah tarikh yang sama atau selepas :date.',
+    'before_or_equal' => 'Medan :attribute mestilah tarikh yang sama atau sebelum :date.',
+    'confirmed' => 'Pengesahan :attribute tidak sepadan.',
+    'date' => 'Medan :attribute mestilah tarikh yang sah.',
+    'date_format' => 'Medan :attribute mestilah mengikut format :format.',
+    'email' => 'Medan :attribute mestilah alamat e-mel yang sah.',
+    'image' => 'Medan :attribute mestilah fail gambar.',
+    'in' => 'Pilihan bagi medan :attribute tidak sah.',
+    'integer' => 'Medan :attribute mestilah nombor bulat.',
+    'max' => [
+        'file' => 'Saiz :attribute tidak boleh melebihi :max kilobait.',
+        'numeric' => 'Nilai :attribute tidak boleh melebihi :max.',
+        'string' => 'Panjang :attribute tidak boleh melebihi :max aksara.',
+    ],
+    'min' => [
+        'numeric' => 'Nilai :attribute mestilah sekurang-kurangnya :min.',
+        'string' => 'Panjang :attribute mestilah sekurang-kurangnya :min aksara.',
+    ],
+    'required' => 'Medan :attribute wajib diisi.',
+    'string' => 'Medan :attribute mestilah teks.',
+    'uuid' => 'Medan :attribute mestilah UUID yang sah.',
+
+    'attributes' => [
+        'access_token' => 'token akses',
+        'admin_note' => 'catatan pentadbir',
+        'admin_reply' => 'jawapan pentadbir',
+        'booking_date' => 'tarikh tempahan',
+        'booking_id' => 'tempahan',
+        'complaint_text' => 'aduan',
+        'email' => 'alamat e-mel',
+        'account_type' => 'jenis akaun',
+        'full_name' => 'nama penuh',
+        'note' => 'catatan',
+        'password' => 'kata laluan',
+        'password_confirmation' => 'pengesahan kata laluan',
+        'pax' => 'bilangan pengguna',
+        'photo' => 'gambar',
+        'purpose' => 'tujuan',
+        'role' => 'peranan',
+        'start_time' => 'waktu mula',
+        'status' => 'status',
+    ],
+];

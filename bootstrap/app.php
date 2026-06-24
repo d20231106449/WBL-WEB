@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Middleware\EnsureSupabaseAdmin;
+use App\Http\Middleware\EnsureSupabaseAuthenticated;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -13,8 +15,8 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
-            'supabase.admin' => \App\Http\Middleware\EnsureSupabaseAdmin::class,
-            'supabase.auth' => \App\Http\Middleware\EnsureSupabaseAuthenticated::class,
+            'supabase.admin' => EnsureSupabaseAdmin::class,
+            'supabase.auth' => EnsureSupabaseAuthenticated::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

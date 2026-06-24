@@ -3,21 +3,35 @@
 namespace App\Services;
 
 use Illuminate\Http\Client\PendingRequest;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Http;
 use RuntimeException;
 
 class SupabaseService
 {
     private string $url;
+
     private string $key;
 
     public function __construct()
     {
         $this->url = rtrim((string) config('services.supabase.url'), '/');
         $this->key = (string) config('services.supabase.key');
+    }
 
-        if ($this->url === '' || $this->key === '') {
-            throw new RuntimeException('Supabase is not configured.');
+    private function ensureConfigured(): void
+    {
+        if (
+            $this->url === ''
+            || $this->key === ''
+            || str_contains($this->url, 'your-project')
+            || str_starts_with($this->key, 'your-')
+        ) {
+            throw new RuntimeException('Supabase belum dikonfigurasi. Tetapkan SUPABASE_URL dan SUPABASE_ANON_KEY sebenar dalam fail .env.');
+        }
+
+        if (filter_var($this->url, FILTER_VALIDATE_URL) === false) {
+            throw new RuntimeException('SUPABASE_URL dalam fail .env tidak sah.');
         }
     }
 
@@ -31,6 +45,41 @@ class SupabaseService
         }
 
         return $response->json();
+    }
+
+    public function signUp(string $fullName, string $email, string $password): array
+    {
+        $response = $this->client()->post('/auth/v1/signup', [
+            'email' => $email,
+            'password' => $password,
+            'data' => ['full_name' => $fullName, 'role' => 'user'],
+        ]);
+
+        if ($response->failed()) {
+            throw new RuntimeException($response->json('error_description') ?? $response->json('msg') ?? 'Pendaftaran akaun gagal.');
+        }
+
+        return $response->json();
+    }
+
+    public function sendPasswordReset(string $email, string $redirectUrl): void
+    {
+        $response = $this->client()
+            ->post('/auth/v1/recover?redirect_to='.urlencode($redirectUrl), compact('email'));
+
+        if ($response->failed()) {
+            throw new RuntimeException($response->json('error_description') ?? $response->json('msg') ?? 'E-mel pemulihan tidak dapat dihantar.');
+        }
+    }
+
+    public function updatePassword(string $token, string $password): void
+    {
+        $response = $this->authenticated($token)
+            ->put('/auth/v1/user', compact('password'));
+
+        if ($response->failed()) {
+            throw new RuntimeException($response->json('error_description') ?? $response->json('msg') ?? 'Kata laluan tidak dapat dikemas kini.');
+        }
     }
 
     public function profile(string $token, string $userId): ?array
@@ -66,6 +115,41 @@ class SupabaseService
         return $response->json() ?? [];
     }
 
+    public function expireApprovedBookings(string $token, array $bookings): array
+    {
+        foreach ($bookings as &$booking) {
+            if (
+                ($booking['status'] ?? '') !== 'approved'
+                || empty($booking['id'])
+                || empty($booking['booking_date'])
+                || empty($booking['end_time'])
+            ) {
+                continue;
+            }
+
+            $end = Carbon::parse(
+                $booking['booking_date'].' '.$booking['end_time'],
+                config('app.timezone'),
+            );
+
+            if ($end->isFuture()) {
+                continue;
+            }
+
+            $updatedAt = now()->toIso8601String();
+            $this->update($token, 'bookings', $booking['id'], [
+                'status' => 'cancelled',
+                'updated_at' => $updatedAt,
+            ]);
+
+            $booking['status'] = 'cancelled';
+            $booking['updated_at'] = $updatedAt;
+        }
+        unset($booking);
+
+        return $bookings;
+    }
+
     public function insert(string $token, string $table, array $data): array
     {
         $response = $this->authenticated($token)
@@ -99,7 +183,7 @@ class SupabaseService
             ->post('/storage/v1/object/checkout_photos/'.$path);
 
         if ($response->failed()) {
-            throw new RuntimeException($response->json('message') ?? 'Gambar tidak dapat dimuat naik.');
+            throw new RuntimeException($response->json('message') ?? 'Gambar bukti tidak dapat dimuat naik.');
         }
 
         return $this->url.'/storage/v1/object/public/checkout_photos/'.$path;
@@ -107,6 +191,8 @@ class SupabaseService
 
     private function client(): PendingRequest
     {
+        $this->ensureConfigured();
+
         return Http::baseUrl($this->url)
             ->acceptJson()
             ->asJson()

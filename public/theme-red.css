@@ -1,0 +1,101 @@
+:root{
+    --blue:#dc2626;
+    --blue-dark:#991b1b;
+    --blue-deep:#7f1d1d;
+    --bg:#fff8f8;
+    --ink:#241313;
+    --muted:#746465;
+    --line:#f0dede;
+    --orange:#dc2626;
+    --primary:#b91c1c;
+    --primary-strong:#7f1d1d;
+    --primary-soft:#fff1f2;
+    --page:#fff8f8;
+    --text:#241313;
+    --text-soft:#746465;
+    --border:#eadede;
+    --focus-ring:0 0 0 4px rgba(220,38,38,.14);
+    --card-shadow:0 14px 38px rgba(127,29,29,.08);
+}
+
+html,body{background-color:#fff8f8;color:var(--ink)}
+.admin-body,.user-body{
+    background-color:#fff8f8;
+    background-image:linear-gradient(rgba(255,248,248,.94),rgba(255,248,248,.98)),url('/images/kuo-background.png');
+}
+
+.site-utility-bar{background:#7f1d1d;color:#fee2e2}
+.utility-status i,.live-dot{background:#f87171;box-shadow:0 0 0 4px rgba(248,113,113,.18)}
+.sidebar{background:linear-gradient(180deg,#991b1b 0%,#681313 100%);box-shadow:12px 0 38px rgba(75,12,12,.18)}
+.brand small,.nav-label,.user-copy small{color:#fecaca}
+.nav-item{color:#fee2e2}
+.nav-item.active{color:#7f1d1d;background:#fff;box-shadow:0 10px 24px rgba(60,8,8,.22)}
+.icon-button{color:#fecaca}
+
+.topbar,.user-header{border-color:#f0dede;box-shadow:0 5px 22px rgba(127,29,29,.055)}
+.topbar h1{color:#241313}
+.menu-button{color:#7f1d1d;background:#fff1f2}
+.user-desktop-nav a{color:#685959}
+.user-desktop-nav a:hover{color:#b91c1c;background:#fff7f7}
+.user-desktop-nav a.active{color:#991b1b;border-color:#dc2626}
+.user-account:hover{background:#fff1f2}
+.avatar,.user-account .avatar{color:#991b1b;background:#fee2e2}
+
+.hero-panel,.user-hero{
+    background-image:linear-gradient(110deg,rgba(127,29,29,.95),rgba(185,28,28,.82) 62%,rgba(239,68,68,.68)),url('/images/kuo-background.png');
+    box-shadow:0 22px 48px rgba(127,29,29,.2);
+}
+.hero-panel:before,.hero-panel:after,.user-hero:after{border-color:rgba(254,202,202,.2)}
+.hero-panel p,.user-hero>div>span,.hero-kicker,.user-hero p{color:#fee2e2}
+.hero-panel h2 em{color:#fecaca}
+.hero-mark,.kitchen-mark{border-color:#fecaca;box-shadow:0 16px 34px rgba(90,10,10,.24)}
+.hero-mark i,.kitchen-mark i{background:#ef4444}
+.user-hero a{color:#991b1b;background:#fff;border-color:#fecaca}
+.user-hero a:hover{background:#fff1f2}
+
+.eyebrow,.user-section-head p,.user-page-title p,.page-heading .eyebrow{color:#b91c1c}
+.panel,.user-section,.user-form-card,.profile-card,.my-booking-card,.user-complaint-card,.complaint-card,.evidence-card,.stat-card,.user-stat-grid article{
+    border-color:#eadede;
+    box-shadow:0 12px 30px rgba(127,29,29,.06);
+}
+.stat-card.blue .stat-icon,.user-stat-icon.blue{color:#b91c1c;background:#fff1f2}
+.stat-card.cyan .stat-icon,.stat-card.orange .stat-icon,.user-stat-icon.purple{color:#dc2626;background:#fff1f2}
+.stat-card.green .stat-icon,.user-stat-icon.green{color:#991b1b;background:#fee2e2}
+.stat-card a,.panel-header>a,.user-section-head a,.user-empty a{color:#b91c1c}
+.date-block,.next-date{color:#991b1b;background:#fff1f2;border-color:#fecaca}
+.next-booking,.activity-count span{background:#fffafa;border-color:#f0dede}
+.user-quick-link>span{color:#dc2626}
+.rules-card{background:#fff1f2;border-color:#fecaca}
+.rules-card>span{color:#991b1b;background:#fecaca}
+.rules-card p{color:#9f5555}
+
+.primary-button,.user-primary-button,.compact-primary,.button.primary{
+    color:#fff;
+    background:linear-gradient(100deg,#7f1d1d,#dc2626);
+    box-shadow:0 10px 22px rgba(185,28,28,.22);
+}
+.primary-button:hover,.user-primary-button:hover,.compact-primary:hover,.button.primary:hover{box-shadow:0 14px 28px rgba(185,28,28,.28)}
+.action-button,.text-button{color:#b91c1c;background:#fff1f2}
+.action-button:hover{color:#fff;background:#b91c1c}
+.round-link{color:#b91c1c;border-color:#eadede}
+.booking-help{background:linear-gradient(145deg,#7f1d1d,#b91c1c);box-shadow:0 15px 32px rgba(127,29,29,.2)}
+.booking-help li{color:#fee2e2}
+.time-slots label span:hover{border-color:#f87171;background:#fffafa}
+.time-slots input:checked+span{color:#991b1b;border-color:#dc2626;background:#fff1f2}
+
+.login-page{background:#fff8f8}
+.login-visual{background-image:linear-gradient(145deg,rgba(127,29,29,.94),rgba(185,28,28,.85) 67%,rgba(220,38,38,.74)),url('/images/kuo-background.png')}
+.login-main{background:linear-gradient(145deg,#fff,#fff7f7)}
+.login-form-wrap{border-color:#eadede;box-shadow:0 24px 58px rgba(127,29,29,.12)}
+.login-brand small,.visual-copy p,.visual-card small{color:#fee2e2}
+.visual-pill{color:#fecaca;border-color:rgba(254,202,202,.35)}
+.visual-copy h1 em{color:#fecaca}
+.mini-icon{color:#fecaca}.pulse-ring{background:#f87171;box-shadow:0 0 0 5px rgba(248,113,113,.18)}
+.account-type-options input:checked+span{color:#991b1b;border-color:#b91c1c;background:#fff1f2}
+.forgot-password-link,.auth-register-prompt a{color:#b91c1c}
+.login-form input:focus,.action-modal textarea:focus,.user-form-card input:focus,.user-form-card select:focus,.user-form-card textarea:focus{border-color:#dc2626;box-shadow:var(--focus-ring)}
+.password-field button:hover{color:#b91c1c;background:#fff1f2}
+
+.profile-hero{background:linear-gradient(135deg,#7f1d1d,#dc2626)}
+.user-bottom-nav a.active{color:#b91c1c}
+::selection{color:#fff;background:#b91c1c}

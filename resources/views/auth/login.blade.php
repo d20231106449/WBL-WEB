@@ -3,8 +3,10 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Log Masuk Admin · DapurLink KUO</title>
+    <meta name="theme-color" content="#b91c1c">
+    <title>Log Masuk · DapurLink KUO</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <link rel="stylesheet" href="{{ asset('theme-red.css') }}?v={{ filemtime(public_path('theme-red.css')) }}">
 </head>
 <body class="login-page">
 <section class="login-visual">
@@ -13,7 +15,7 @@
     <div class="visual-copy">
         <span class="visual-pill">Portal Dapur Siswa</span>
         <h1>Tempah dan urus dapur<br>dengan lebih <em>teratur.</em></h1>
-        <p>Satu portal untuk pelajar membuat tempahan dan admin mengurus penggunaan dapur.</p>
+        <p>Satu portal untuk pelajar membuat tempahan dan pentadbir mengurus penggunaan dapur.</p>
     </div>
     <div class="visual-card">
         <span class="mini-icon">✓</span><div><strong>Pangkalan data yang sama</strong><small>Disambungkan terus dengan aplikasi pelajar.</small></div><span class="pulse-ring"></span>
@@ -27,13 +29,23 @@
         @include('partials.alerts')
         <form method="POST" action="{{ route('login.store') }}" class="login-form">
             @csrf
-            <label>Alamat emel<input type="email" name="email" value="{{ old('email') }}" placeholder="admin@kuo.edu.my" required autofocus autocomplete="email"></label>
+            <fieldset class="account-type-field">
+                <legend>Log masuk sebagai</legend>
+                <div class="account-type-options">
+                    <label><input type="radio" name="account_type" value="user" {{ old('account_type', 'user') === 'user' ? 'checked' : '' }} required><span>Pelajar</span></label>
+                    <label><input type="radio" name="account_type" value="admin" {{ old('account_type') === 'admin' ? 'checked' : '' }} required><span>Pentadbir</span></label>
+                </div>
+            </fieldset>
+            <label>Alamat e-mel<input class="@error('email') is-invalid @enderror" type="email" name="email" value="{{ old('email') }}" placeholder="nama@contoh.com" required autofocus autocomplete="email">@error('email')<span class="field-error">{{ $message }}</span>@enderror</label>
             <label>Kata laluan
-                <span class="password-field"><input id="password" type="password" name="password" placeholder="Masukkan kata laluan" required autocomplete="current-password"><button type="button" data-password-toggle="password" aria-label="Tunjukkan kata laluan">◉</button></span>
+                <span class="password-field"><input class="@error('password') is-invalid @enderror" id="password" type="password" name="password" placeholder="Masukkan kata laluan" required autocomplete="current-password"><button type="button" data-password-toggle="password" aria-label="Tunjukkan kata laluan" aria-pressed="false">◉</button></span>
+                @error('password')<span class="field-error">{{ $message }}</span>@enderror
             </label>
+            <a class="forgot-password-link" href="{{ route('password.request') }}">Lupa kata laluan?</a>
             <button class="primary-button" type="submit">Log Masuk <span>→</span></button>
         </form>
-        <p class="security-note"><span>◆</span> Anda akan dibawa ke portal pelajar atau admin mengikut peranan akaun.</p>
+        <div class="auth-register-prompt"><span>Belum mempunyai akaun?</span><a href="{{ route('register') }}">Daftar akaun baharu</a></div>
+        <p class="security-note"><span>◆</span> Anda akan dibawa ke portal pelajar atau pentadbir mengikut peranan akaun.</p>
     </div>
 </main>
 </body>

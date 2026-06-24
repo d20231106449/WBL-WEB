@@ -12,6 +12,7 @@ class EnsureSupabaseAuthenticated
     {
         if (! session()->has('supabase_token') || ! session()->has('profile.id')) {
             session()->forget(['supabase_token', 'supabase_refresh_token', 'profile', 'admin']);
+
             return redirect()->route('login')->withErrors(['email' => 'Sila log masuk untuk meneruskan.']);
         }
 

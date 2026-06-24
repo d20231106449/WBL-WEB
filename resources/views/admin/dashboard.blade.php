@@ -1,9 +1,9 @@
 @extends('layouts.admin')
-@section('title', 'Ringkasan')
-@section('page-title', 'Ringkasan Hari Ini')
+@section('title', 'Status')
+@section('page-title', 'Status Hari Ini')
 @section('content')
 <section class="hero-panel">
-    <div><span class="hero-kicker">SELAMAT DATANG, {{ strtoupper(explode(' ', session('profile.full_name', 'ADMIN'))[0]) }}</span><h2>Dapur dalam kawalan.<br><em>Hari ini nampak baik.</em></h2><p>Semak permohonan baharu dan perkara yang perlukan perhatian anda.</p></div>
+    <div><span class="hero-kicker">SELAMAT DATANG, {{ strtoupper(explode(' ', session('profile.full_name', 'PENTADBIR'))[0]) }}</span><h2>Dapur dalam kawalan.<br><em>Keadaan hari ini baik.</em></h2><p>Semak permohonan baharu dan perkara yang memerlukan perhatian anda.</p></div>
     <div class="hero-mark"><img src="{{ asset('images/kuo-logo.png') }}" alt="Logo Kolej Ungku Omar"><i></i></div>
 </section>
 
@@ -24,7 +24,7 @@
             @foreach(collect($bookings)->where('status', 'pending')->take(5) as $booking)
                 @php($person = $profilesById->get($booking['user_id'] ?? ''))
                 <article class="booking-row">
-                    <div class="date-block"><strong>{{ \Illuminate\Support\Carbon::parse($booking['booking_date'])->format('d') }}</strong><span>{{ strtoupper(\Illuminate\Support\Carbon::parse($booking['booking_date'])->format('M')) }}</span></div>
+                    <div class="date-block"><strong>{{ \Illuminate\Support\Carbon::parse($booking['booking_date'])->format('d') }}</strong><span>{{ strtoupper(\Illuminate\Support\Carbon::parse($booking['booking_date'])->translatedFormat('M')) }}</span></div>
                     <div class="booking-info"><strong>{{ $person['full_name'] ?? $booking['user_name'] ?? 'Pelajar' }}</strong><span>{{ substr($booking['start_time'] ?? '', 0, 5) }} – {{ substr($booking['end_time'] ?? '', 0, 5) }} · {{ $booking['pax'] ?? 1 }} orang</span></div>
                     @include('partials.status', ['status' => $booking['status']])
                     <a class="round-link" href="{{ route('admin.bookings', ['status' => 'pending']) }}">→</a>
@@ -36,8 +36,8 @@
     <aside class="panel quick-panel">
         <div class="panel-header"><div><p class="eyebrow">PINTASAN</p><h3>Tindakan pantas</h3></div></div>
         <a href="{{ route('admin.bookings', ['status' => 'pending']) }}"><span class="quick-icon blue">✓</span><div><strong>Lulus tempahan</strong><small>Semak permohonan pelajar</small></div><b>→</b></a>
-        <a href="{{ route('admin.complaints', ['status' => 'open']) }}"><span class="quick-icon orange">◇</span><div><strong>Jawab aduan</strong><small>Urus maklum balas terbuka</small></div><b>→</b></a>
-        <a href="{{ route('admin.checkouts') }}"><span class="quick-icon green">▧</span><div><strong>Semak bukti</strong><small>Lihat gambar selepas guna</small></div><b>→</b></a>
+        <a href="{{ route('admin.complaints', ['status' => 'open']) }}"><span class="quick-icon orange">◇</span><div><strong>Jawab aduan</strong><small>Urus aduan yang belum diselesaikan</small></div><b>→</b></a>
+        <a href="{{ route('admin.checkouts') }}"><span class="quick-icon green">▧</span><div><strong>Semak bukti</strong><small>Lihat gambar selepas penggunaan</small></div><b>→</b></a>
     </aside>
 </div>
 @endsection

@@ -6,12 +6,21 @@ use App\Http\Controllers\UserPortalController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    if (! session()->has('profile.id')) return redirect()->route('login');
+    if (! session()->has('profile.id')) {
+        return redirect()->route('login');
+    }
+
     return redirect()->route(session('profile.role') === 'admin' ? 'admin.dashboard' : 'user.dashboard');
 });
 
 Route::get('/login', [AdminAuthController::class, 'show'])->name('login');
 Route::post('/login', [AdminAuthController::class, 'login'])->name('login.store');
+Route::get('/register', [AdminAuthController::class, 'registerForm'])->name('register');
+Route::post('/register', [AdminAuthController::class, 'register'])->name('register.store');
+Route::get('/forgot-password', [AdminAuthController::class, 'forgotPasswordForm'])->name('password.request');
+Route::post('/forgot-password', [AdminAuthController::class, 'sendPasswordReset'])->name('password.email');
+Route::get('/reset-password', [AdminAuthController::class, 'resetPasswordForm'])->name('password.reset');
+Route::post('/reset-password', [AdminAuthController::class, 'resetPassword'])->name('password.update');
 Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
 
 Route::prefix('admin')->name('admin.')->middleware('supabase.admin')->group(function () {
