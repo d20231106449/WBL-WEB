@@ -2,6 +2,26 @@
 
 $storagePath = '/tmp/storage';
 
+function setVercelDefault(string $key, string $value): void
+{
+    if (getenv($key) !== false && getenv($key) !== '') {
+        return;
+    }
+
+    putenv($key.'='.$value);
+    $_ENV[$key] = $value;
+    $_SERVER[$key] = $value;
+}
+
+setVercelDefault('APP_ENV', 'production');
+setVercelDefault('APP_DEBUG', 'false');
+setVercelDefault('LOG_CHANNEL', 'stderr');
+setVercelDefault('LOG_STACK', 'stderr');
+setVercelDefault('SESSION_DRIVER', 'cookie');
+setVercelDefault('CACHE_STORE', 'array');
+setVercelDefault('QUEUE_CONNECTION', 'sync');
+setVercelDefault('FILESYSTEM_DISK', 'local');
+
 foreach ([
     $storagePath,
     $storagePath.'/app',
