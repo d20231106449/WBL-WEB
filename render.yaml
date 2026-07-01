@@ -17,6 +17,8 @@ services:
         sync: false
       - key: APP_URL
         sync: false
+      - key: ASSET_URL
+        sync: false
       - key: APP_TIMEZONE
         value: Asia/Kuala_Lumpur
       - key: APP_LOCALE
@@ -29,6 +31,8 @@ services:
         value: stderr
       - key: SESSION_DRIVER
         value: cookie
+      - key: SESSION_SECURE_COOKIE
+        value: "true"
       - key: CACHE_STORE
         value: array
       - key: QUEUE_CONNECTION
