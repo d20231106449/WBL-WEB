@@ -84,19 +84,21 @@ class AdminAuthController extends Controller
     {
         $data = $request->validate([
             'full_name' => ['required', 'string', 'max:120'],
+            'phone_number' => ['required', 'string', 'max:30'],
+            'matric_no' => ['required', 'string', 'max:50'],
             'email' => ['required', 'email'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password' => ['required', 'string', 'min:6', 'confirmed'],
         ]);
 
         try {
-            $supabase->signUp($data['full_name'], $data['email'], $data['password']);
+            $supabase->signUp($data['full_name'], $data['email'], $data['password'], $data['phone_number'], $data['matric_no']);
 
             return redirect()->route('login')->with(
                 'success',
                 'Pendaftaran berjaya. Sila sahkan e-mel anda jika menerima e-mel pengesahan, kemudian log masuk sebagai pelajar.',
             );
         } catch (Throwable $e) {
-            return back()->withInput($request->only('full_name', 'email'))->withErrors([
+            return back()->withInput($request->only('full_name', 'phone_number', 'matric_no', 'email'))->withErrors([
                 'email' => $this->registrationErrorMessage($e),
             ]);
         }
@@ -129,7 +131,7 @@ class AdminAuthController extends Controller
     {
         $data = $request->validate([
             'access_token' => ['required', 'string'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password' => ['required', 'string', 'min:6', 'confirmed'],
         ], ['access_token.required' => 'Pautan pemulihan tidak sah atau telah tamat tempoh.']);
 
         try {

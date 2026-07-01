@@ -56,10 +56,52 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    document.querySelectorAll('[data-gallery-slideshow]').forEach((gallery) => {
+        const slides = [...gallery.querySelectorAll('[data-gallery-slide]')];
+        const dots = [...gallery.querySelectorAll('[data-gallery-dot]')];
+        const previous = gallery.querySelector('[data-gallery-prev]');
+        const next = gallery.querySelector('[data-gallery-next]');
+        if (slides.length < 2) return;
+
+        let index = 0;
+        let timer;
+        const show = (target) => {
+            index = (target + slides.length) % slides.length;
+            slides.forEach((slide, slideIndex) => slide.classList.toggle('active', slideIndex === index));
+            dots.forEach((dot, dotIndex) => dot.classList.toggle('active', dotIndex === index));
+        };
+        const start = () => {
+            window.clearInterval(timer);
+            timer = window.setInterval(() => show(index + 1), 4500);
+        };
+
+        previous?.addEventListener('click', () => {
+            show(index - 1);
+            start();
+        });
+        next?.addEventListener('click', () => {
+            show(index + 1);
+            start();
+        });
+        dots.forEach((dot) => {
+            dot.addEventListener('click', () => {
+                show(Number(dot.dataset.galleryDot));
+                start();
+            });
+        });
+        gallery.addEventListener('mouseenter', () => window.clearInterval(timer));
+        gallery.addEventListener('mouseleave', start);
+        gallery.addEventListener('focusin', () => window.clearInterval(timer));
+        gallery.addEventListener('focusout', start);
+        start();
+    });
+
     const bookingForm = document.querySelector('[data-booking-form]');
     if (bookingForm) {
         const dateInput = bookingForm.querySelector('[data-booking-date]');
         const timeInputs = [...bookingForm.querySelectorAll('[data-booking-time]')];
+        const bookedSlotsUrl = bookingForm.dataset.bookedSlotsUrl;
+        let bookedSlotKeys = new Set();
         const serverStartedAt = new Date(bookingForm.dataset.serverNow);
         const browserStartedAt = Date.now();
         const malaysiaClock = new Intl.DateTimeFormat('en-CA', {
@@ -72,6 +114,33 @@ document.addEventListener('DOMContentLoaded', () => {
             hourCycle: 'h23',
         });
 
+        const normalizeTime = (value) => (value || '').slice(0, 5);
+        const slotKey = (start) => {
+            const [hour] = start.split(':').map(Number);
+            return `${start}-${String(hour + 1).padStart(2, '0')}:00`;
+        };
+
+        timeInputs.forEach((input) => {
+            const label = input.closest('label')?.querySelector('[data-slot-label]');
+            if (label && !label.dataset.originalLabel) label.dataset.originalLabel = label.textContent;
+        });
+
+        const fetchBookedSlots = async () => {
+            if (!bookedSlotsUrl || !dateInput.value) return;
+            try {
+                const url = new URL(bookedSlotsUrl, window.location.origin);
+                url.searchParams.set('booking_date', dateInput.value);
+                const response = await fetch(url, { headers: { Accept: 'application/json' } });
+                if (!response.ok) throw new Error('slot_fetch_failed');
+                const payload = await response.json();
+                bookedSlotKeys = new Set((payload.slots || []).map((slot) => {
+                    return `${normalizeTime(slot.start_time)}-${normalizeTime(slot.end_time)}`;
+                }));
+            } catch (_) {
+                bookedSlotKeys = new Set();
+            }
+        };
+
         const refreshPastSlots = () => {
             const current = new Date(serverStartedAt.getTime() + (Date.now() - browserStartedAt));
             const parts = Object.fromEntries(
@@ -83,17 +152,31 @@ document.addEventListener('DOMContentLoaded', () => {
             const currentMinutes = Number(parts.hour) * 60 + Number(parts.minute);
 
             timeInputs.forEach((input) => {
+                const label = input.closest('label');
+                const labelText = label?.querySelector('[data-slot-label]');
                 const [hour, minute] = input.value.split(':').map(Number);
                 const elapsed = dateInput.value === today && (hour * 60 + minute) <= currentMinutes;
-                input.disabled = elapsed;
-                input.closest('label')?.classList.toggle('time-slot-past', elapsed);
-                if (elapsed && input.checked) input.checked = false;
+                const booked = bookedSlotKeys.has(slotKey(input.value));
+                input.disabled = elapsed || booked;
+                label?.classList.toggle('time-slot-past', elapsed);
+                label?.classList.toggle('time-slot-booked', booked);
+                if (labelText) {
+                    labelText.textContent = booked
+                        ? 'Ditempah'
+                        : labelText.dataset.originalLabel;
+                }
+                if ((elapsed || booked) && input.checked) input.checked = false;
             });
         };
 
-        dateInput.addEventListener('change', refreshPastSlots);
-        refreshPastSlots();
-        window.setInterval(refreshPastSlots, 60000);
+        const refreshAvailability = async () => {
+            await fetchBookedSlots();
+            refreshPastSlots();
+        };
+
+        dateInput.addEventListener('change', refreshAvailability);
+        refreshAvailability();
+        window.setInterval(refreshAvailability, 60000);
     }
 
     const recovery = document.querySelector('[data-password-recovery]');

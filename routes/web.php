@@ -38,11 +38,18 @@ Route::prefix('app')->name('user.')->middleware('supabase.auth')->group(function
     Route::get('/', [UserPortalController::class, 'dashboard'])->name('dashboard');
     Route::get('/bookings', [UserPortalController::class, 'bookings'])->name('bookings');
     Route::get('/bookings/create', [UserPortalController::class, 'createBooking'])->name('bookings.create');
+    Route::get('/bookings/slots', [UserPortalController::class, 'bookedSlots'])->name('bookings.slots');
     Route::post('/bookings', [UserPortalController::class, 'storeBooking'])->name('bookings.store');
     Route::patch('/bookings/{booking}/cancel', [UserPortalController::class, 'cancelBooking'])->name('bookings.cancel');
+    Route::get('/gallery', [UserPortalController::class, 'gallery'])->name('gallery');
     Route::get('/complaints', [UserPortalController::class, 'complaints'])->name('complaints');
     Route::post('/complaints', [UserPortalController::class, 'storeComplaint'])->name('complaints.store');
     Route::get('/bookings/{booking}/checkout', [UserPortalController::class, 'checkout'])->name('checkout');
     Route::post('/bookings/{booking}/checkout', [UserPortalController::class, 'storeCheckout'])->name('checkout.store');
     Route::get('/profile', [UserPortalController::class, 'profile'])->name('profile');
+    Route::get('/profile/edit', [UserPortalController::class, 'editProfile'])->name('profile.edit');
+    Route::patch('/profile', [UserPortalController::class, 'updateProfile'])->name('profile.update');
+    Route::get('/profile/password', [UserPortalController::class, 'changePasswordForm'])->name('profile.password');
+    Route::patch('/profile/password', [UserPortalController::class, 'changePassword'])->name('profile.password.update');
+    Route::get('/about', [UserPortalController::class, 'about'])->name('about');
 });

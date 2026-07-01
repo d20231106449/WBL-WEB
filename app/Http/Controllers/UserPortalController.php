@@ -6,6 +6,7 @@ use App\Services\SupabaseService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 use Throwable;
 
@@ -44,18 +45,37 @@ class UserPortalController extends Controller
         return view('user.create-booking');
     }
 
+    public function bookedSlots(Request $request): JsonResponse
+    {
+        $data = $request->validate(['booking_date' => ['required', 'date']]);
+
+        try {
+            $slots = $this->supabase->rpc($this->token(), 'get_booked_slots_by_date', [
+                'p_booking_date' => $data['booking_date'],
+            ]);
+        } catch (Throwable) {
+            $slots = $this->supabase->select($this->token(), 'bookings', [
+                'select' => 'start_time,end_time,status',
+                'booking_date' => 'eq.'.$data['booking_date'],
+                'status' => 'in.(pending,approved)',
+            ]);
+        }
+
+        return response()->json(['slots' => $slots ?? []]);
+    }
+
     public function storeBooking(Request $request): RedirectResponse
     {
         $data = $request->validate([
             'booking_date' => ['required', 'date', 'after_or_equal:today', 'before_or_equal:'.now()->addDays(90)->toDateString()],
             'start_time' => ['required', 'date_format:H:i'],
             'purpose' => ['required', 'string', 'max:300'],
-            'pax' => ['required', 'integer', 'min:1', 'max:30'],
+            'pax' => ['required', 'integer', 'min:1', 'max:12'],
         ]);
 
         $start = Carbon::createFromFormat('H:i', $data['start_time']);
         if ($start->lt(Carbon::createFromTime(8)) || $start->gte(Carbon::createFromTime(22))) {
-            return back()->withInput()->withErrors(['start_time' => 'Waktu tempahan mestilah antara 8:00 pagi hingga 9:00 malam.']);
+            return back()->withInput()->withErrors(['start_time' => 'Waktu tempahan mestilah antara 8:00 AM hingga 9:00 PM.']);
         }
         $data['end_time'] = $start->copy()->addHour()->format('H:i');
 
@@ -121,6 +141,20 @@ class UserPortalController extends Controller
         return view('user.complaints', compact('complaints', 'bookings', 'error'));
     }
 
+    public function gallery(): View
+    {
+        $photos = [
+            ['file' => 'kitchen_1.png', 'title' => 'Ruang memasak utama', 'caption' => 'Susun atur dapur untuk penggunaan harian pelajar.'],
+            ['file' => 'kitchen_2.png', 'title' => 'Kaunter penyediaan', 'caption' => 'Permukaan kerja yang sesuai untuk penyediaan bahan.'],
+            ['file' => 'kitchen_3.png', 'title' => 'Kemudahan sinki', 'caption' => 'Ruang cucian untuk memastikan kebersihan selepas digunakan.'],
+            ['file' => 'kitchen_4.png', 'title' => 'Peralatan dapur', 'caption' => 'Kemudahan asas yang dikongsi bersama warga kolej.'],
+            ['file' => 'kitchen_5.png', 'title' => 'Ruang berkumpulan', 'caption' => 'Sesuai untuk aktiviti memasak kecil dan program kolej.'],
+            ['file' => 'kitchen_6.png', 'title' => 'Kawasan kemas', 'caption' => 'Pastikan ruang ditinggalkan bersih untuk pengguna seterusnya.'],
+        ];
+
+        return view('user.gallery', compact('photos'));
+    }
+
     public function storeComplaint(Request $request): RedirectResponse
     {
         $data = $request->validate(['complaint_text' => ['required', 'string', 'max:1000'], 'booking_id' => ['nullable', 'uuid']]);
@@ -145,6 +179,9 @@ class UserPortalController extends Controller
             if (($record['status'] ?? '') !== 'approved') {
                 return redirect()->route('user.bookings')->withErrors(['action' => 'Pengesahan selesai penggunaan hanya tersedia untuk tempahan yang diluluskan.']);
             }
+            if ($this->supabase->hasCheckout($this->token(), $booking)) {
+                return redirect()->route('user.bookings')->withErrors(['action' => 'Check-Out untuk tempahan ini telah dihantar.']);
+            }
 
             return view('user.checkout', ['booking' => $record]);
         } catch (Throwable $e) {
@@ -159,6 +196,9 @@ class UserPortalController extends Controller
             $record = $this->ownedBooking($booking);
             if (($record['status'] ?? '') !== 'approved') {
                 throw new \RuntimeException('Tempahan ini tidak boleh disahkan sebagai selesai digunakan.');
+            }
+            if ($this->supabase->hasCheckout($this->token(), $booking)) {
+                throw new \RuntimeException('Check-Out untuk tempahan ini telah dihantar.');
             }
             $file = $request->file('photo');
             $path = $booking.'_'.now()->timestamp.'.'.$file->extension();
@@ -177,6 +217,66 @@ class UserPortalController extends Controller
     public function profile(): View
     {
         return view('user.profile');
+    }
+
+    public function editProfile(): View
+    {
+        return view('user.edit-profile');
+    }
+
+    public function updateProfile(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'full_name' => ['required', 'string', 'max:120'],
+            'email' => ['required', 'email'],
+            'phone_number' => ['nullable', 'string', 'max:30'],
+            'matric_no' => ['nullable', 'string', 'max:50'],
+        ]);
+
+        try {
+            $currentEmail = (string) session('profile.email');
+            if ($data['email'] !== $currentEmail) {
+                $this->supabase->updateAuthEmail($this->token(), $data['email']);
+            }
+
+            $profile = $this->supabase->update($this->token(), 'profiles', (string) session('profile.id'), $data)[0] ?? (session('profile') + $data);
+            session(['profile' => array_merge(session('profile', []), $profile)]);
+
+            return redirect()->route('user.profile')->with('success', 'Profil berjaya dikemas kini.');
+        } catch (Throwable $e) {
+            report($e);
+
+            return back()->withInput()->withErrors(['action' => $e->getMessage()]);
+        }
+    }
+
+    public function changePasswordForm(): View
+    {
+        return view('user.change-password');
+    }
+
+    public function changePassword(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'current_password' => ['required', 'string'],
+            'password' => ['required', 'string', 'min:6', 'confirmed'],
+        ]);
+
+        try {
+            $this->supabase->signIn((string) session('profile.email'), $data['current_password']);
+            $this->supabase->updatePassword($this->token(), $data['password']);
+
+            return redirect()->route('user.profile')->with('success', 'Kata laluan berjaya dikemas kini.');
+        } catch (Throwable $e) {
+            report($e);
+
+            return back()->withErrors(['current_password' => 'Kata laluan semasa tidak betul atau kemas kini gagal.']);
+        }
+    }
+
+    public function about(): View
+    {
+        return view('user.about');
     }
 
     private function myBookings(): array

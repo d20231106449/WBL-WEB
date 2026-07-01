@@ -22,6 +22,7 @@
         <a class="{{ request()->routeIs('user.dashboard') ? 'active' : '' }}" href="{{ route('user.dashboard') }}">Utama</a>
         <a class="{{ request()->routeIs('user.bookings.create') ? 'active' : '' }}" href="{{ route('user.bookings.create') }}">Buat Tempahan</a>
         <a class="{{ request()->routeIs('user.bookings') ? 'active' : '' }}" href="{{ route('user.bookings') }}">Tempahan Saya</a>
+        <a class="{{ request()->routeIs('user.gallery') ? 'active' : '' }}" href="{{ route('user.gallery') }}">Galeri</a>
         <a class="{{ request()->routeIs('user.complaints') ? 'active' : '' }}" href="{{ route('user.complaints') }}">Aduan</a>
     </nav>
     <a class="user-account" href="{{ route('user.profile') }}"><span class="avatar small">{{ strtoupper(substr(session('profile.full_name', 'P'),0,1)) }}</span><span><strong>{{ session('profile.full_name', 'Pelajar') }}</strong><small>Pelajar</small></span></a>
@@ -34,8 +35,9 @@
     <a class="{{ request()->routeIs('user.dashboard') ? 'active' : '' }}" href="{{ route('user.dashboard') }}"><span>&#8962;</span>Utama</a>
     <a class="{{ request()->routeIs('user.bookings.create') ? 'active' : '' }}" href="{{ route('user.bookings.create') }}"><span>&plus;</span>Tempah</a>
     <a class="{{ request()->routeIs('user.bookings') ? 'active' : '' }}" href="{{ route('user.bookings') }}"><span>&#9635;</span>Tempahan</a>
+    <a class="{{ request()->routeIs('user.gallery') ? 'active' : '' }}" href="{{ route('user.gallery') }}"><span>&#9638;</span>Galeri</a>
     <a class="{{ request()->routeIs('user.complaints') ? 'active' : '' }}" href="{{ route('user.complaints') }}"><span>&#9671;</span>Aduan</a>
-    <a class="{{ request()->routeIs('user.profile') ? 'active' : '' }}" href="{{ route('user.profile') }}"><span>&#9823;</span>Profil</a>
+    <a class="{{ request()->routeIs('user.profile*') || request()->routeIs('user.about') ? 'active' : '' }}" href="{{ route('user.profile') }}"><span>&#9823;</span>Profil</a>
 </nav>
 </body>
 </html>

@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#b91c1c">
-    <title>Daftar Akaun · DapurLink KUO</title>
+    <title>Daftar Akaun - DapurLink KUO</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="stylesheet" href="{{ asset('theme-red.css') }}?v={{ filemtime(public_path('theme-red.css')) }}">
 </head>
@@ -27,18 +27,20 @@
         <form method="POST" action="{{ route('register.store') }}" class="login-form">
             @csrf
             <label>Nama penuh<input class="@error('full_name') is-invalid @enderror" type="text" name="full_name" value="{{ old('full_name') }}" maxlength="120" placeholder="Nama seperti dalam rekod pelajar" required autofocus autocomplete="name">@error('full_name')<span class="field-error">{{ $message }}</span>@enderror</label>
+            <label>Nombor telefon<input class="@error('phone_number') is-invalid @enderror" type="text" name="phone_number" value="{{ old('phone_number') }}" maxlength="30" placeholder="Contoh: 0123456789" required autocomplete="tel">@error('phone_number')<span class="field-error">{{ $message }}</span>@enderror</label>
+            <label>Nombor matrik<input class="@error('matric_no') is-invalid @enderror" type="text" name="matric_no" value="{{ old('matric_no') }}" maxlength="50" placeholder="Contoh: D20231106516" required>@error('matric_no')<span class="field-error">{{ $message }}</span>@enderror</label>
             <label>Alamat e-mel<input class="@error('email') is-invalid @enderror" type="email" name="email" value="{{ old('email') }}" placeholder="nama@contoh.com" required autocomplete="email">@error('email')<span class="field-error">{{ $message }}</span>@enderror</label>
             <label>Kata laluan
-                <span class="password-field"><input class="@error('password') is-invalid @enderror" id="register-password" type="password" name="password" minlength="8" required autocomplete="new-password"><button type="button" data-password-toggle="register-password" aria-label="Tunjukkan kata laluan" aria-pressed="false">◉</button></span>
-                <span class="form-help">Gunakan sekurang-kurangnya lapan aksara.</span>
+                <span class="password-field"><input class="@error('password') is-invalid @enderror" id="register-password" type="password" name="password" minlength="6" required autocomplete="new-password"><button type="button" data-password-toggle="register-password" aria-label="Tunjukkan kata laluan" aria-pressed="false">Lihat</button></span>
+                <span class="form-help">Gunakan sekurang-kurangnya enam aksara.</span>
                 @error('password')<span class="field-error">{{ $message }}</span>@enderror
             </label>
             <label>Sahkan kata laluan
-                <span class="password-field"><input id="register-password-confirmation" type="password" name="password_confirmation" minlength="8" required autocomplete="new-password"><button type="button" data-password-toggle="register-password-confirmation" aria-label="Tunjukkan kata laluan" aria-pressed="false">◉</button></span>
+                <span class="password-field"><input id="register-password-confirmation" type="password" name="password_confirmation" minlength="6" required autocomplete="new-password"><button type="button" data-password-toggle="register-password-confirmation" aria-label="Tunjukkan kata laluan" aria-pressed="false">Lihat</button></span>
             </label>
-            <button class="primary-button" type="submit">Daftar akaun <span>→</span></button>
+            <button class="primary-button" type="submit">Daftar akaun <span>&rarr;</span></button>
         </form>
-        <a class="auth-back-link" href="{{ route('login') }}">← Kembali ke halaman log masuk</a>
+        <a class="auth-back-link" href="{{ route('login') }}">&larr; Kembali ke halaman log masuk</a>
     </div>
 </main>
 </body>

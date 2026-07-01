@@ -47,12 +47,17 @@ class SupabaseService
         return $response->json();
     }
 
-    public function signUp(string $fullName, string $email, string $password): array
+    public function signUp(string $fullName, string $email, string $password, ?string $phoneNumber = null, ?string $matricNo = null): array
     {
         $response = $this->client()->post('/auth/v1/signup', [
             'email' => $email,
             'password' => $password,
-            'data' => ['full_name' => $fullName, 'role' => 'user'],
+            'data' => [
+                'full_name' => $fullName,
+                'phone_number' => $phoneNumber,
+                'matric_no' => $matricNo,
+                'role' => 'user',
+            ],
         ]);
 
         if ($response->failed()) {
@@ -79,6 +84,16 @@ class SupabaseService
 
         if ($response->failed()) {
             throw new RuntimeException($response->json('error_description') ?? $response->json('msg') ?? 'Kata laluan tidak dapat dikemas kini.');
+        }
+    }
+
+    public function updateAuthEmail(string $token, string $email): void
+    {
+        $response = $this->authenticated($token)
+            ->put('/auth/v1/user', compact('email'));
+
+        if ($response->failed()) {
+            throw new RuntimeException($response->json('error_description') ?? $response->json('msg') ?? 'E-mel log masuk tidak dapat dikemas kini.');
         }
     }
 
@@ -148,6 +163,15 @@ class SupabaseService
         unset($booking);
 
         return $bookings;
+    }
+
+    public function hasCheckout(string $token, string $bookingId): bool
+    {
+        return count($this->select($token, 'checkouts', [
+            'select' => 'id',
+            'booking_id' => 'eq.'.$bookingId,
+            'limit' => 1,
+        ])) > 0;
     }
 
     public function insert(string $token, string $table, array $data): array

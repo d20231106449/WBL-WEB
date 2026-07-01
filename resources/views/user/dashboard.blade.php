@@ -24,6 +24,7 @@
 <aside class="user-section">
     <div class="user-section-head"><div><p>STATUS</p><h2>Aktiviti anda</h2></div></div>
     <div class="activity-count"><span><b>{{ $pendingCount }}</b> Menunggu</span><span><b>{{ $approvedCount }}</b> Diluluskan</span></div>
+    <a class="user-quick-link" href="{{ route('user.gallery') }}"><span>▧</span><div><strong>Galeri Dapur</strong><small>Lihat kemudahan sebelum membuat tempahan</small></div><b>→</b></a>
     <a class="user-quick-link" href="{{ route('user.complaints') }}"><span>◇</span><div><strong>Aduan dan Maklum Balas</strong><small>Maklumkan kepada kami jika terdapat masalah</small></div><b>→</b></a>
 </aside>
 </div>

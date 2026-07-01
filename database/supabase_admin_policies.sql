@@ -16,6 +16,9 @@ $$;
 
 grant execute on function public.is_admin() to authenticated;
 
+alter table public.profiles add column if not exists phone_number text;
+alter table public.profiles add column if not exists matric_no text;
+
 -- Cipta profil pelajar secara automatik bagi setiap pendaftaran Auth baharu.
 create or replace function public.handle_new_user()
 returns trigger
@@ -24,11 +27,13 @@ security definer
 set search_path = public
 as $$
 begin
-  insert into public.profiles (id, full_name, email, role)
+  insert into public.profiles (id, full_name, email, phone_number, matric_no, role)
   values (
     new.id,
     coalesce(new.raw_user_meta_data ->> 'full_name', split_part(new.email, '@', 1)),
     new.email,
+    new.raw_user_meta_data ->> 'phone_number',
+    new.raw_user_meta_data ->> 'matric_no',
     'user'
   )
   on conflict (id) do nothing;
@@ -41,6 +46,21 @@ drop trigger if exists on_auth_user_created on auth.users;
 create trigger on_auth_user_created
 after insert on auth.users
 for each row execute function public.handle_new_user();
+
+create or replace function public.get_booked_slots_by_date(p_booking_date date)
+returns table(start_time time, end_time time, status text)
+language sql
+security definer
+set search_path = public
+stable
+as $$
+  select b.start_time::time, b.end_time::time, b.status
+  from public.bookings b
+  where b.booking_date = p_booking_date
+    and b.status in ('pending', 'approved');
+$$;
+
+grant execute on function public.get_booked_slots_by_date(date) to authenticated;
 
 -- Student access: each signed-in user can only work with their own records.
 -- Remove older broad policies from the original Flutter setup before replacing them.
