@@ -3,8 +3,8 @@
 return [
 
     'supabase' => [
-        'url' => env('SUPABASE_URL'),
-        'key' => env('SUPABASE_ANON_KEY'),
+        'url' => env('SUPABASE_URL', env('VITE_SUPABASE_URL')),
+        'key' => env('SUPABASE_ANON_KEY', env('VITE_SUPABASE_ANON_KEY', env('VITE_SUPABASE_PUBLISHABLE_KEY'))),
     ],
 
     /*

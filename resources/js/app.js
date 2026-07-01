@@ -1,3 +1,5 @@
+import { getSupabaseClient } from './lib/supabase';
+
 document.addEventListener('DOMContentLoaded', () => {
     const sidebar = document.querySelector('#sidebar');
     const sidebarToggle = document.querySelector('[data-sidebar-toggle]');
@@ -196,5 +198,74 @@ document.addEventListener('DOMContentLoaded', () => {
                 ? decodeURIComponent(error.replaceAll('+', ' '))
                 : 'Pautan pemulihan tidak sah atau telah tamat tempoh. Sila minta pautan baharu.';
         }
+    }
+
+    const forgotPasswordForm = document.querySelector('[data-forgot-password-form]');
+    if (forgotPasswordForm) {
+        const emailInput = forgotPasswordForm.querySelector('[data-forgot-password-email]');
+        const submitButton = forgotPasswordForm.querySelector('[data-forgot-password-submit]');
+        const buttonLabel = submitButton?.querySelector('[data-button-label]');
+        const successBox = document.querySelector('[data-forgot-password-success]');
+        const errorBox = document.querySelector('[data-forgot-password-error]');
+        const fieldError = forgotPasswordForm.querySelector('[data-forgot-password-field-error]');
+        const defaultButtonLabel = buttonLabel?.textContent || 'Hantar pautan pemulihan';
+
+        const setMessage = (box, message) => {
+            if (!box) return;
+            box.hidden = false;
+            box.querySelector('p').textContent = message;
+        };
+
+        const clearMessages = () => {
+            [successBox, errorBox].forEach((box) => {
+                if (!box) return;
+                box.hidden = true;
+                box.querySelector('p').textContent = '';
+            });
+            if (fieldError) fieldError.textContent = '';
+            emailInput?.classList.remove('is-invalid');
+        };
+
+        const setLoading = (isLoading) => {
+            if (submitButton) submitButton.disabled = isLoading;
+            if (buttonLabel) buttonLabel.textContent = isLoading ? 'Menghantar...' : defaultButtonLabel;
+        };
+
+        forgotPasswordForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            clearMessages();
+
+            if (!emailInput?.value.trim()) {
+                emailInput?.classList.add('is-invalid');
+                if (fieldError) fieldError.textContent = 'Alamat e-mel wajib diisi.';
+                return;
+            }
+
+            if (!emailInput.checkValidity()) {
+                emailInput.classList.add('is-invalid');
+                if (fieldError) fieldError.textContent = 'Format alamat e-mel tidak sah.';
+                return;
+            }
+
+            setLoading(true);
+
+            try {
+                const supabase = await getSupabaseClient();
+                const { error } = await supabase.auth.resetPasswordForEmail(emailInput.value.trim(), {
+                    redirectTo: `${window.location.origin}/reset-password`,
+                });
+
+                if (error) throw error;
+
+                setMessage(successBox, 'Pautan pemulihan kata laluan telah dihantar ke e-mel anda.');
+                forgotPasswordForm.reset();
+            } catch (error) {
+                const message = error?.message || 'Supabase environment variables are missing.';
+                console.error(message, error);
+                setMessage(errorBox, message);
+            } finally {
+                setLoading(false);
+            }
+        });
     }
 });

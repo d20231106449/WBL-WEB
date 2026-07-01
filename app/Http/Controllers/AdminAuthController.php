@@ -116,9 +116,9 @@ class AdminAuthController extends Controller
         try {
             $supabase->sendPasswordReset($data['email'], route('password.reset'));
 
-            return back()->with('success', 'Jika akaun itu wujud, pautan menetapkan semula kata laluan telah dihantar ke e-mel anda.');
+            return back()->with('success', 'Pautan pemulihan kata laluan telah dihantar ke e-mel anda.');
         } catch (Throwable $e) {
-            return back()->withInput()->withErrors(['email' => $this->loginErrorMessage($e)]);
+            return back()->withInput()->withErrors(['email' => $e->getMessage()]);
         }
     }
 
