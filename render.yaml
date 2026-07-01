@@ -1,0 +1,41 @@
+services:
+  - type: web
+    name: dapurlink-kuo
+    env: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    autoDeploy: true
+    healthCheckPath: /up
+    envVars:
+      - key: APP_NAME
+        value: DapurLink KUO
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: "false"
+      - key: APP_KEY
+        sync: false
+      - key: APP_URL
+        sync: false
+      - key: APP_TIMEZONE
+        value: Asia/Kuala_Lumpur
+      - key: APP_LOCALE
+        value: ms
+      - key: APP_FALLBACK_LOCALE
+        value: ms
+      - key: LOG_CHANNEL
+        value: stderr
+      - key: LOG_STACK
+        value: stderr
+      - key: SESSION_DRIVER
+        value: cookie
+      - key: CACHE_STORE
+        value: array
+      - key: QUEUE_CONNECTION
+        value: sync
+      - key: FILESYSTEM_DISK
+        value: local
+      - key: SUPABASE_URL
+        value: https://ihovylagnopqpimqxwsc.supabase.co
+      - key: SUPABASE_ANON_KEY
+        sync: false

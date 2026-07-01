@@ -5,22 +5,6 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserPortalController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/vercel-check', function () {
-    return response()->json([
-        'ok' => true,
-        'app_env' => config('app.env'),
-        'app_key_set' => filled(config('app.key')),
-        'supabase_url_set' => filled(config('services.supabase.url')),
-        'supabase_key_set' => filled(config('services.supabase.key')),
-        'session_driver' => config('session.driver'),
-        'cache_store' => config('cache.default'),
-        'queue_connection' => config('queue.default'),
-        'storage_path' => storage_path(),
-        'storage_writable' => is_writable(storage_path()),
-        'vite_manifest_exists' => file_exists(public_path('build/manifest.json')),
-    ]);
-});
-
 Route::get('/', function () {
     if (! session()->has('profile.id')) {
         return redirect()->route('login');
