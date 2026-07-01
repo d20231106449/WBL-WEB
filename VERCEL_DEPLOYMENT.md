@@ -1,6 +1,7 @@
 # Deploy Laravel ke Vercel
 
 Projek ini Laravel/PHP, jadi Vercel perlu guna community PHP runtime melalui `vercel.json`.
+Jika build Vercel gagal dengan error `composer: command not found` atau exit code `127`, pastikan `installCommand` dalam `vercel.json` hanya menjalankan `npm ci`. Composer dependencies akan diurus oleh runtime PHP.
 
 ## Cara Deploy
 
