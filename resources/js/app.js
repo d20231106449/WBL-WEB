@@ -35,6 +35,113 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    const loginForm = document.querySelector('[data-login-form]');
+    if (loginForm) {
+        const emailInput = loginForm.querySelector('[data-login-email]');
+        const passwordInput = loginForm.querySelector('[data-login-password]');
+        const submitButton = loginForm.querySelector('[data-login-submit]');
+        const buttonLabel = submitButton?.querySelector('[data-button-label]');
+        const errorBox = document.querySelector('[data-login-error]');
+        const emailError = loginForm.querySelector('[data-login-email-error]');
+        const passwordError = loginForm.querySelector('[data-login-password-error]');
+        const defaultButtonLabel = buttonLabel?.textContent || 'Log Masuk';
+
+        const setLoginError = (message) => {
+            if (!errorBox) return;
+            errorBox.hidden = false;
+            errorBox.querySelector('p').textContent = message;
+        };
+
+        const clearLoginMessages = () => {
+            if (errorBox) {
+                errorBox.hidden = true;
+                errorBox.querySelector('p').textContent = '';
+            }
+            [emailError, passwordError].forEach((element) => {
+                if (element) element.textContent = '';
+            });
+            emailInput?.classList.remove('is-invalid');
+            passwordInput?.classList.remove('is-invalid');
+        };
+
+        const setLoginLoading = (isLoading) => {
+            if (submitButton) submitButton.disabled = isLoading;
+            if (buttonLabel) buttonLabel.textContent = isLoading ? 'Memproses...' : defaultButtonLabel;
+        };
+
+        loginForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            clearLoginMessages();
+
+            if (!emailInput?.value.trim()) {
+                emailInput?.classList.add('is-invalid');
+                if (emailError) emailError.textContent = 'Alamat e-mel wajib diisi.';
+                return;
+            }
+
+            if (!emailInput.checkValidity()) {
+                emailInput.classList.add('is-invalid');
+                if (emailError) emailError.textContent = 'Format alamat e-mel tidak sah.';
+                return;
+            }
+
+            if (!passwordInput?.value) {
+                passwordInput?.classList.add('is-invalid');
+                if (passwordError) passwordError.textContent = 'Kata laluan wajib diisi.';
+                return;
+            }
+
+            setLoginLoading(true);
+
+            try {
+                const supabase = await getSupabaseClient();
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email: emailInput.value.trim(),
+                    password: passwordInput.value,
+                });
+
+                if (error) throw error;
+
+                const { data: profile, error: profileError } = await supabase
+                    .from('profiles')
+                    .select('*')
+                    .eq('id', data.user.id)
+                    .single();
+
+                if (profileError) throw profileError;
+                if (!profile) throw new Error('Akaun pengesahan ditemukan, tetapi profil pengguna belum tersedia.');
+
+                const accountType = new FormData(loginForm).get('account_type');
+                const response = await fetch(loginForm.dataset.sessionUrl, {
+                    method: 'POST',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '',
+                    },
+                    body: JSON.stringify({
+                        account_type: accountType,
+                        access_token: data.session.access_token,
+                        refresh_token: data.session.refresh_token,
+                        user: data.user,
+                        profile,
+                    }),
+                });
+                const payload = await response.json();
+
+                if (!response.ok) throw new Error(payload.message || 'Log masuk gagal.');
+
+                window.location.assign(payload.redirect);
+            } catch (error) {
+                const message = error?.message || 'Log masuk gagal.';
+                console.error(message, error);
+                setLoginError(message);
+            } finally {
+                setLoginLoading(false);
+            }
+        });
+    }
+
     document.querySelectorAll('[data-modal-open]').forEach((button) => {
         button.addEventListener('click', () => document.getElementById(button.dataset.modalOpen)?.showModal());
     });

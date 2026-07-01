@@ -29,6 +29,8 @@ CACHE_STORE=array
 QUEUE_CONNECTION=sync
 ```
 
+Jika Render Docker build tidak memasukkan `VITE_*` ke bundle, nilai Supabase anon key yang sama turut dibaca melalui meta tag Laravel pada runtime. Jangan masukkan service role key.
+
 Nilai lain sudah disediakan dalam `render.yaml`.
 
 ## Nota

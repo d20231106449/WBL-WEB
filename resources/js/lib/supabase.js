@@ -1,8 +1,11 @@
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL?.trim();
+const metaContent = (name) => document.querySelector(`meta[name="${name}"]`)?.content?.trim();
+
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL?.trim()
+    || metaContent('supabase-url');
 const supabaseKey = (
     import.meta.env.VITE_SUPABASE_ANON_KEY
     || import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY
-)?.trim();
+)?.trim() || metaContent('supabase-anon-key');
 
 let supabaseClientPromise;
 

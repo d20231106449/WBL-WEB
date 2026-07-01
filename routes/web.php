@@ -15,6 +15,7 @@ Route::get('/', function () {
 
 Route::get('/login', [AdminAuthController::class, 'show'])->name('login');
 Route::post('/login', [AdminAuthController::class, 'login'])->name('login.store');
+Route::post('/auth/client-session', [AdminAuthController::class, 'clientSession'])->name('auth.client-session');
 Route::get('/register', [AdminAuthController::class, 'registerForm'])->name('register');
 Route::post('/register', [AdminAuthController::class, 'register'])->name('register.store');
 Route::get('/forgot-password', [AdminAuthController::class, 'forgotPasswordForm'])->name('password.request');

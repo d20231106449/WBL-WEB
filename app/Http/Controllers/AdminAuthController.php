@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\SupabaseService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Throwable;
@@ -61,6 +62,44 @@ class AdminAuthController extends Controller
                 'email' => $this->loginErrorMessage($e),
             ]);
         }
+    }
+
+    public function clientSession(Request $request): JsonResponse
+    {
+        $data = $request->validate([
+            'account_type' => ['required', 'in:user,admin'],
+            'access_token' => ['required', 'string'],
+            'refresh_token' => ['nullable', 'string'],
+            'user.id' => ['required', 'string'],
+            'profile.id' => ['required', 'string'],
+            'profile.role' => ['required', 'in:user,admin'],
+            'profile.email' => ['nullable', 'email'],
+            'profile.full_name' => ['nullable', 'string'],
+        ]);
+
+        if (($data['profile']['id'] ?? null) !== ($data['user']['id'] ?? null)) {
+            return response()->json(['message' => 'Profil pengguna tidak sepadan dengan akaun Supabase.'], 422);
+        }
+
+        if (($data['profile']['role'] ?? 'user') !== $data['account_type']) {
+            $message = $data['account_type'] === 'admin'
+                ? 'Akaun ini bukan akaun pentadbir.'
+                : 'Akaun pentadbir perlu log masuk melalui pilihan Pentadbir.';
+
+            return response()->json(['message' => $message], 422);
+        }
+
+        $request->session()->regenerate();
+        session([
+            'supabase_token' => $data['access_token'],
+            'supabase_refresh_token' => $data['refresh_token'] ?? null,
+            'profile' => $data['profile'],
+            'admin' => $data['profile']['role'] === 'admin' ? $data['profile'] : null,
+        ]);
+
+        return response()->json([
+            'redirect' => route($data['profile']['role'] === 'admin' ? 'admin.dashboard' : 'user.dashboard', absolute: false),
+        ]);
     }
 
     public function logout(Request $request): RedirectResponse
@@ -137,7 +176,7 @@ class AdminAuthController extends Controller
         try {
             $supabase->updatePassword($data['access_token'], $data['password']);
 
-            return redirect()->route('login')->with('success', 'Kata laluan berjaya ditukar. Sila log masuk menggunakan kata laluan baharu.');
+            return redirect()->route('login')->with('password_reset_success', 'Kata laluan berjaya ditukar. Sila log masuk menggunakan kata laluan baharu.');
         } catch (Throwable $e) {
             return back()->withErrors(['password' => 'Pautan pemulihan tidak sah atau telah tamat tempoh. Sila minta pautan baharu.']);
         }

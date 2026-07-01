@@ -29,8 +29,7 @@
             @include('partials.alerts')
             <div class="alert success" role="status" data-forgot-password-success hidden><span aria-hidden="true">✓</span><p></p></div>
             <div class="alert error" role="alert" data-forgot-password-error hidden><span aria-hidden="true">!</span><p></p></div>
-            <form method="POST" action="{{ route('password.email') }}" class="login-form" data-forgot-password-form novalidate>
-                @csrf
+            <form class="login-form" data-forgot-password-form novalidate>
                 <label>Alamat e-mel<input class="@error('email') is-invalid @enderror" type="email" name="email"
                         value="{{ old('email') }}" placeholder="nama@contoh.com" required autofocus
                         autocomplete="email" data-forgot-password-email>
