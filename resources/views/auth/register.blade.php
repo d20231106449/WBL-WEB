@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#b91c1c">
     <title>Daftar Akaun - DapurLink KUO</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <link rel="stylesheet" href="{{ asset('theme-red.css') }}?v={{ filemtime(public_path('theme-red.css')) }}">
+    @include('partials.assets')
 </head>
 <body class="login-page">
 <section class="login-visual">

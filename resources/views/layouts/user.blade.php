@@ -5,8 +5,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="theme-color" content="#b91c1c">
     <title>@yield('title', 'DapurLink KUO')</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <link rel="stylesheet" href="{{ asset('theme-red.css') }}?v={{ filemtime(public_path('theme-red.css')) }}">
+    @include('partials.assets')
 </head>
 <body class="user-body">
 <div class="site-utility-bar">
