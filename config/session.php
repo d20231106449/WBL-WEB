@@ -18,7 +18,9 @@ return [
     |
     */
 
-    'driver' => env('SESSION_DRIVER', 'cookie'),
+    'driver' => env('SESSION_DRIVER', 'cookie') === 'database'
+        ? 'cookie'
+        : env('SESSION_DRIVER', 'cookie'),
 
     /*
     |--------------------------------------------------------------------------

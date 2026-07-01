@@ -293,7 +293,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const parameters = new URLSearchParams(window.location.hash.slice(1));
         const token = parameters.get('access_token');
         const error = parameters.get('error_description');
+        const errorCode = parameters.get('error_code');
         const errorBox = recovery.querySelector('[data-recovery-error]');
+        const recoveryForm = recovery.querySelector('[data-recovery-form]');
+
+        const recoveryErrorMessage = () => {
+            if (errorCode === 'otp_expired' || errorCode === 'access_denied') {
+                return 'Pautan pemulihan tidak sah atau telah tamat tempoh. Sila minta pautan baharu.';
+            }
+
+            return error
+                ? decodeURIComponent(error.replaceAll('+', ' '))
+                : 'Pautan pemulihan tidak sah atau telah tamat tempoh. Sila minta pautan baharu.';
+        };
 
         if (token) {
             recovery.querySelector('[data-recovery-token]').value = token;
@@ -301,9 +313,11 @@ document.addEventListener('DOMContentLoaded', () => {
             window.history.replaceState({}, document.title, window.location.pathname);
         } else {
             errorBox.hidden = false;
-            errorBox.querySelector('p').textContent = error
-                ? decodeURIComponent(error.replaceAll('+', ' '))
-                : 'Pautan pemulihan tidak sah atau telah tamat tempoh. Sila minta pautan baharu.';
+            errorBox.querySelector('p').textContent = recoveryErrorMessage();
+            recoveryForm?.setAttribute('aria-disabled', 'true');
+            recoveryForm?.querySelectorAll('input, button').forEach((element) => {
+                element.disabled = true;
+            });
         }
     }
 

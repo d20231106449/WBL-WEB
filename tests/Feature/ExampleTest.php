@@ -54,7 +54,7 @@ class ExampleTest extends TestCase
             'profile' => ['id' => 'user-id', 'full_name' => 'Test User', 'email' => 'test@example.com', 'role' => 'user'],
         ])->get('/app/bookings/create')
             ->assertOk()
-            ->assertSee('Buat Tempahan')
+            ->assertSee('Buat tempahan')
             ->assertSee('Pilih waktu anda');
     }
 
