@@ -14,6 +14,12 @@ FROM php:8.4-apache
 
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
 ENV PORT=10000
+ENV LOG_CHANNEL=stderr
+ENV LOG_STACK=stderr
+ENV SESSION_DRIVER=cookie
+ENV CACHE_STORE=array
+ENV QUEUE_CONNECTION=sync
+ENV FILESYSTEM_DISK=local
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends git unzip zip libcurl4-openssl-dev libicu-dev libonig-dev libzip-dev \

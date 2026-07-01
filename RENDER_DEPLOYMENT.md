@@ -20,6 +20,9 @@ Set nilai ini dalam Render:
 APP_KEY=base64:APP_KEY_DARIPADA_ENV_LOCAL
 APP_URL=https://nama-service.onrender.com
 SUPABASE_ANON_KEY=SUPABASE_ANON_KEY_SEBENAR
+SESSION_DRIVER=cookie
+CACHE_STORE=array
+QUEUE_CONNECTION=sync
 ```
 
 Nilai lain sudah disediakan dalam `render.yaml`.
