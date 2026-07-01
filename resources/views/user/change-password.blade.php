@@ -1,5 +1,5 @@
 @extends('layouts.user')
-@section('title','Tukar Kata Laluan - DapurLink KUO')
+@section('title','Tukar kata laluan - DapurLink KUO')
 @section('content')
 <div class="user-page-title"><a href="{{ route('user.profile') }}">&larr;</a><div><p>KESELAMATAN</p><h1>Tukar kata laluan</h1><span>Gunakan kata laluan baharu untuk akaun DapurLink anda.</span></div></div>
 <form class="user-form-card" method="POST" action="{{ route('user.profile.password.update') }}">

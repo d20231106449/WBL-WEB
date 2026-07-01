@@ -180,7 +180,7 @@ class UserPortalController extends Controller
                 return redirect()->route('user.bookings')->withErrors(['action' => 'Pengesahan selesai penggunaan hanya tersedia untuk tempahan yang diluluskan.']);
             }
             if ($this->supabase->hasCheckout($this->token(), $booking)) {
-                return redirect()->route('user.bookings')->withErrors(['action' => 'Check-Out untuk tempahan ini telah dihantar.']);
+                return redirect()->route('user.bookings')->withErrors(['action' => 'Pengesahan selesai penggunaan untuk tempahan ini telah dihantar.']);
             }
 
             return view('user.checkout', ['booking' => $record]);
@@ -198,7 +198,7 @@ class UserPortalController extends Controller
                 throw new \RuntimeException('Tempahan ini tidak boleh disahkan sebagai selesai digunakan.');
             }
             if ($this->supabase->hasCheckout($this->token(), $booking)) {
-                throw new \RuntimeException('Check-Out untuk tempahan ini telah dihantar.');
+                throw new \RuntimeException('Pengesahan selesai penggunaan untuk tempahan ini telah dihantar.');
             }
             $file = $request->file('photo');
             $path = $booking.'_'.now()->timestamp.'.'.$file->extension();

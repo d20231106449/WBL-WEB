@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#b91c1c">
-    <title>Lupa Kata Laluan - DapurLink KUO</title>
+    <title>Lupa kata laluan - DapurLink KUO</title>
     @include('partials.assets')
 </head>
 
@@ -27,7 +27,7 @@
             <h2>Lupa kata laluan?</h2>
             <p class="form-intro">Masukkan e-mel akaun DapurLink anda untuk menerima pautan pemulihan.</p>
             @include('partials.alerts')
-            <div class="alert success" role="status" data-forgot-password-success hidden><span aria-hidden="true">✓</span><p></p></div>
+            <div class="alert success" role="status" data-forgot-password-success hidden><span aria-hidden="true">&check;</span><p></p></div>
             <div class="alert error" role="alert" data-forgot-password-error hidden><span aria-hidden="true">!</span><p></p></div>
             <form class="login-form" data-forgot-password-form novalidate>
                 <label>Alamat e-mel<input class="@error('email') is-invalid @enderror" type="email" name="email"
@@ -38,9 +38,9 @@
                     @enderror
                     <span class="field-error" data-forgot-password-field-error></span>
                 </label>
-                <button class="primary-button" type="submit" data-forgot-password-submit><span data-button-label>Hantar pautan pemulihan</span> <span>→</span></button>
+                <button class="primary-button" type="submit" data-forgot-password-submit><span data-button-label>Hantar pautan pemulihan</span> <span>&rarr;</span></button>
             </form>
-            <a class="auth-back-link" href="{{ route('login') }}">← Kembali ke log masuk</a>
+            <a class="auth-back-link" href="{{ route('login') }}">&larr; Kembali ke log masuk</a>
         </div>
     </main>
 </body>

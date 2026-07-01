@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#b91c1c">
-    <title>Tetapkan Kata Laluan · DapurLink KUO</title>
+    <title>Tetapkan kata laluan - DapurLink KUO</title>
     @include('partials.assets')
 </head>
 <body class="login-page">
@@ -28,14 +28,14 @@
             @csrf
             <input type="hidden" name="access_token" data-recovery-token>
             <label>Kata laluan baharu
-                <span class="password-field"><input class="@error('password') is-invalid @enderror" id="new-password" type="password" name="password" minlength="8" required autocomplete="new-password"><button type="button" data-password-toggle="new-password" aria-label="Tunjukkan kata laluan" aria-pressed="false">◉</button></span>
+                <span class="password-field"><input class="@error('password') is-invalid @enderror" id="new-password" type="password" name="password" minlength="8" required autocomplete="new-password"><button type="button" data-password-toggle="new-password" aria-label="Tunjukkan kata laluan" aria-pressed="false">Lihat</button></span>
                 <span class="form-help">Gunakan sekurang-kurangnya lapan aksara.</span>
                 @error('password')<span class="field-error">{{ $message }}</span>@enderror
             </label>
             <label>Sahkan kata laluan
-                <span class="password-field"><input id="password-confirmation" type="password" name="password_confirmation" minlength="8" required autocomplete="new-password"><button type="button" data-password-toggle="password-confirmation" aria-label="Tunjukkan kata laluan" aria-pressed="false">◉</button></span>
+                <span class="password-field"><input id="password-confirmation" type="password" name="password_confirmation" minlength="8" required autocomplete="new-password"><button type="button" data-password-toggle="password-confirmation" aria-label="Tunjukkan kata laluan" aria-pressed="false">Lihat</button></span>
             </label>
-            <button class="primary-button" type="submit" data-recovery-submit disabled>Simpan kata laluan baharu <span>→</span></button>
+            <button class="primary-button" type="submit" data-recovery-submit disabled>Simpan kata laluan baharu <span>&rarr;</span></button>
         </form>
         <a class="auth-back-link" href="{{ route('password.request') }}">Minta pautan pemulihan baharu</a>
     </div>

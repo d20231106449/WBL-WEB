@@ -19,8 +19,8 @@
     <a href="{{ route('user.dashboard') }}" class="user-brand"><img class="site-logo user-logo" src="{{ asset('images/kuo-logo.png') }}" alt="Kolej Ungku Omar, Universiti Pendidikan Sultan Idris"></a>
     <nav class="user-desktop-nav">
         <a class="{{ request()->routeIs('user.dashboard') ? 'active' : '' }}" href="{{ route('user.dashboard') }}">Utama</a>
-        <a class="{{ request()->routeIs('user.bookings.create') ? 'active' : '' }}" href="{{ route('user.bookings.create') }}">Buat Tempahan</a>
-        <a class="{{ request()->routeIs('user.bookings') ? 'active' : '' }}" href="{{ route('user.bookings') }}">Tempahan Saya</a>
+        <a class="{{ request()->routeIs('user.bookings.create') ? 'active' : '' }}" href="{{ route('user.bookings.create') }}">Buat tempahan</a>
+        <a class="{{ request()->routeIs('user.bookings') ? 'active' : '' }}" href="{{ route('user.bookings') }}">Tempahan saya</a>
         <a class="{{ request()->routeIs('user.gallery') ? 'active' : '' }}" href="{{ route('user.gallery') }}">Galeri</a>
         <a class="{{ request()->routeIs('user.complaints') ? 'active' : '' }}" href="{{ route('user.complaints') }}">Aduan</a>
     </nav>

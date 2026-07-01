@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="theme-color" content="#b91c1c">
-    <title>Log Masuk - DapurLink KUO</title>
+    <title>Log masuk - DapurLink KUO</title>
     @include('partials.assets')
 </head>
 <body class="login-page">
@@ -18,7 +18,7 @@
         <p>Satu portal untuk pelajar membuat tempahan dan pentadbir mengurus penggunaan dapur.</p>
     </div>
     <div class="visual-card">
-        <span class="mini-icon">✓</span><div><strong>Pangkalan data yang sama</strong><small>Disambungkan terus dengan aplikasi pelajar.</small></div><span class="pulse-ring"></span>
+        <span class="mini-icon">&check;</span><div><strong>Pangkalan data yang sama</strong><small>Disambungkan terus dengan aplikasi pelajar.</small></div><span class="pulse-ring"></span>
     </div>
 </section>
 <main class="login-main">
@@ -27,7 +27,7 @@
         <h2>Log masuk DapurLink</h2>
         <p class="form-intro">Gunakan akaun yang sama seperti aplikasi DapurLink KUO.</p>
         @if(session('password_reset_success'))
-            <div class="alert success" role="status"><span aria-hidden="true">✓</span><p>{{ session('password_reset_success') }}</p><button type="button" data-dismiss aria-label="Tutup mesej">&times;</button></div>
+            <div class="alert success" role="status"><span aria-hidden="true">&check;</span><p>{{ session('password_reset_success') }}</p><button type="button" data-dismiss aria-label="Tutup mesej">&times;</button></div>
         @endif
         @if($errors->any())
             <div class="alert error" role="alert"><span aria-hidden="true">!</span><p>{{ $errors->first() }}</p><button type="button" data-dismiss aria-label="Tutup mesej">&times;</button></div>
@@ -43,14 +43,14 @@
             </fieldset>
             <label>Alamat e-mel<input class="@error('email') is-invalid @enderror" type="email" name="email" value="{{ old('email') }}" placeholder="nama@contoh.com" required autofocus autocomplete="email" data-login-email><span class="field-error" data-login-email-error></span></label>
             <label>Kata laluan
-                <span class="password-field"><input class="@error('password') is-invalid @enderror" id="password" type="password" name="password" placeholder="Masukkan kata laluan" required autocomplete="current-password" data-login-password><button type="button" data-password-toggle="password" aria-label="Tunjukkan kata laluan" aria-pressed="false">◉</button></span>
+                <span class="password-field"><input class="@error('password') is-invalid @enderror" id="password" type="password" name="password" placeholder="Masukkan kata laluan" required autocomplete="current-password" data-login-password><button type="button" data-password-toggle="password" aria-label="Tunjukkan kata laluan" aria-pressed="false">Lihat</button></span>
                 <span class="field-error" data-login-password-error></span>
             </label>
             <a class="forgot-password-link" href="{{ route('password.request') }}">Lupa kata laluan?</a>
-            <button class="primary-button" type="submit" data-login-submit><span data-button-label>Log Masuk</span> <span>→</span></button>
+            <button class="primary-button" type="submit" data-login-submit><span data-button-label>Log masuk</span> <span>&rarr;</span></button>
         </form>
         <div class="auth-register-prompt"><span>Belum mempunyai akaun?</span><a href="{{ route('register') }}">Daftar akaun baharu</a></div>
-        <p class="security-note"><span>◆</span> Anda akan dibawa ke portal pelajar atau pentadbir mengikut peranan akaun.</p>
+        <p class="security-note"><span>&loz;</span> Anda akan dibawa ke portal pelajar atau pentadbir mengikut peranan akaun.</p>
     </div>
 </main>
 </body>

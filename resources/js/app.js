@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const errorBox = document.querySelector('[data-login-error]');
         const emailError = loginForm.querySelector('[data-login-email-error]');
         const passwordError = loginForm.querySelector('[data-login-password-error]');
-        const defaultButtonLabel = buttonLabel?.textContent || 'Log Masuk';
+        const defaultButtonLabel = buttonLabel?.textContent || 'Log masuk';
 
         const setLoginError = (message) => {
             if (!errorBox) return;

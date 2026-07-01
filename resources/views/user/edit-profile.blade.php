@@ -1,7 +1,7 @@
 @extends('layouts.user')
-@section('title','Edit Profil - DapurLink KUO')
+@section('title','Kemas kini profil - DapurLink KUO')
 @section('content')
-<div class="user-page-title"><a href="{{ route('user.profile') }}">&larr;</a><div><p>PROFIL</p><h1>Edit profil</h1><span>Kemas kini maklumat akaun pelajar anda.</span></div></div>
+<div class="user-page-title"><a href="{{ route('user.profile') }}">&larr;</a><div><p>PROFIL</p><h1>Kemas kini profil</h1><span>Kemas kini maklumat akaun pelajar anda.</span></div></div>
 <form class="user-form-card" method="POST" action="{{ route('user.profile.update') }}">
     @csrf
     @method('PATCH')

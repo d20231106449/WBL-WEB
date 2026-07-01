@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 @section('title', 'Tempahan')
-@section('page-title', 'Pengurusan Tempahan')
+@section('page-title', 'Pengurusan tempahan')
 @section('content')
     <div class="page-heading">
         <div>
@@ -19,7 +19,7 @@
         @if ($error)
             <div class="empty-state">{{ $error }}</div>
         @elseif(empty($bookings))
-            <div class="empty-state"><span>▣</span><strong>Tiada tempahan</strong>
+            <div class="empty-state"><span>&#9635;</span><strong>Tiada tempahan</strong>
                 <p>Tiada rekod untuk penapis ini.</p>
             </div>
         @else
@@ -48,8 +48,8 @@
                                     </div>
                                 </td>
                                 <td data-label="Tarikh dan waktu">
-                                    <strong>{{ isset($booking['booking_date']) ? \Illuminate\Support\Carbon::parse($booking['booking_date'])->translatedFormat('d M Y') : '—' }}</strong><small>{{ substr($booking['start_time'] ?? '', 0, 5) }}
-                                        – {{ substr($booking['end_time'] ?? '', 0, 5) }}</small>
+                                    <strong>{{ isset($booking['booking_date']) ? \Illuminate\Support\Carbon::parse($booking['booking_date'])->translatedFormat('d M Y') : '-' }}</strong><small>{{ substr($booking['start_time'] ?? '', 0, 5) }}
+                                        &ndash; {{ substr($booking['end_time'] ?? '', 0, 5) }}</small>
                                 </td>
                                 <td data-label="Tujuan">{{ $booking['purpose'] ?: 'Tidak dinyatakan' }}</td>
                                 <td data-label="Bilangan pengguna">{{ $booking['pax'] ?? 1 }} orang</td>
@@ -66,16 +66,16 @@
                                                     <div>
                                                         <p class="eyebrow">KEPUTUSAN PENTADBIR</p>
                                                         <h3>Semak tempahan</h3>
-                                                    </div><button type="button" data-modal-close>×</button>
+                                                    </div><button type="button" data-modal-close>&times;</button>
                                                 </div>
                                                 <div class="modal-summary">
                                                     <strong>{{ $person['full_name'] ?? 'Pelajar' }}</strong><span>{{ $booking['booking_date'] }}
-                                                        · {{ substr($booking['start_time'] ?? '', 0, 5) }} –
+                                                        &middot; {{ substr($booking['start_time'] ?? '', 0, 5) }} &ndash;
                                                         {{ substr($booking['end_time'] ?? '', 0, 5) }}</span>
                                                     <p>{{ $booking['purpose'] ?: 'Tiada tujuan dinyatakan.' }}</p>
                                                 </div>
                                                 <label>Catatan pentadbir
-                                                    <textarea name="admin_note" rows="3" placeholder="Catatan pilihan untuk pelajar…"></textarea>
+                                                    <textarea name="admin_note" rows="3" placeholder="Catatan pilihan untuk pelajar..."></textarea>
                                                 </label>
                                                 <div class="modal-actions"><button name="status" value="rejected"
                                                         class="button danger">Tolak</button><button name="status"
@@ -83,7 +83,7 @@
                                                 </div>
                                             </form>
                                         </dialog>
-                                    @else<span class="muted">—</span>
+                                    @else<span class="muted">-</span>
                                     @endif
                                 </td>
                             </tr>

@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#b91c1c">
-    <title>Daftar Akaun - DapurLink KUO</title>
+    <title>Daftar akaun - DapurLink KUO</title>
     @include('partials.assets')
 </head>
 <body class="login-page">
