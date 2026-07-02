@@ -29,6 +29,9 @@
 <main class="user-main">
     @include('partials.alerts')
     @yield('content')
+    <footer class="site-footer" aria-label="Maklumat pembangunan">
+        Powered by WBL DTD3053 AT20 META UPSI <span aria-hidden="true">❤️</span>
+    </footer>
 </main>
 <nav class="user-bottom-nav">
     <a class="{{ request()->routeIs('user.dashboard') ? 'active' : '' }}" href="{{ route('user.dashboard') }}"><span>&#8962;</span>Utama</a>
