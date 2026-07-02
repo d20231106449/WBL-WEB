@@ -80,6 +80,27 @@ class ExampleTest extends TestCase
             ->assertRedirect('/admin');
     }
 
+    public function test_client_session_keeps_student_profile_details(): void
+    {
+        $this->postJson('/auth/client-session', [
+            'account_type' => 'user',
+            'access_token' => 'token',
+            'refresh_token' => 'refresh',
+            'user' => ['id' => 'student-id'],
+            'profile' => [
+                'id' => 'student-id',
+                'full_name' => 'Student',
+                'email' => 'student@example.com',
+                'role' => 'user',
+                'phone_number' => '0117995060',
+                'matric_no' => 'D20231106449',
+            ],
+        ])->assertOk();
+
+        $this->assertSame('0117995060', session('profile.phone_number'));
+        $this->assertSame('D20231106449', session('profile.matric_no'));
+    }
+
     public function test_login_shows_a_clear_invalid_credentials_error(): void
     {
         Http::fake([

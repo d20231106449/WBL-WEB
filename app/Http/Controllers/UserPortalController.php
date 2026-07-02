@@ -216,11 +216,15 @@ class UserPortalController extends Controller
 
     public function profile(): View
     {
+        $this->refreshProfileSession();
+
         return view('user.profile');
     }
 
     public function editProfile(): View
     {
+        $this->refreshProfileSession();
+
         return view('user.edit-profile');
     }
 
@@ -316,6 +320,19 @@ class UserPortalController extends Controller
     private function token(): string
     {
         return (string) session('supabase_token');
+    }
+
+    private function refreshProfileSession(): void
+    {
+        try {
+            $profile = $this->supabase->profile($this->token(), (string) session('profile.id'));
+
+            if ($profile) {
+                session(['profile' => array_merge(session('profile', []), $profile)]);
+            }
+        } catch (Throwable $e) {
+            report($e);
+        }
     }
 
     private function asBool(mixed $value): bool

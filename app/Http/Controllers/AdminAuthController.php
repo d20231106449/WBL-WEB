@@ -75,6 +75,9 @@ class AdminAuthController extends Controller
             'profile.role' => ['required', 'in:user,admin'],
             'profile.email' => ['nullable', 'email'],
             'profile.full_name' => ['nullable', 'string'],
+            'profile.phone_number' => ['nullable', 'string'],
+            'profile.matric_no' => ['nullable', 'string'],
+            'profile.matric_number' => ['nullable', 'string'],
         ]);
 
         if (($data['profile']['id'] ?? null) !== ($data['user']['id'] ?? null)) {
