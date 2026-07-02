@@ -19,7 +19,7 @@ class ForceHttps
 
     private function shouldRedirect(Request $request): bool
     {
-        if ($request->secure()) {
+        if ($request->secure() || $request->header('x-forwarded-proto') === 'https') {
             return false;
         }
 
