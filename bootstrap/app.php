@@ -2,7 +2,6 @@
 
 use App\Http\Middleware\EnsureSupabaseAdmin;
 use App\Http\Middleware\EnsureSupabaseAuthenticated;
-use App\Http\Middleware\ForceHttps;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -16,7 +15,6 @@ $app = Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->trustProxies(at: '*');
-        $middleware->prepend(ForceHttps::class);
 
         $middleware->alias([
             'supabase.admin' => EnsureSupabaseAdmin::class,
