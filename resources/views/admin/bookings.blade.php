@@ -60,7 +60,7 @@
                                             data-modal-open="booking-{{ $booking['id'] }}">Semak</button>
                                         <dialog class="action-modal" id="booking-{{ $booking['id'] }}">
                                             <form method="POST"
-                                                action="{{ route('admin.bookings.update', $booking['id']) }}">@csrf
+                                                action="{{ route('admin.bookings.update', $booking['id'], false) }}">@csrf
                                                 @method('PATCH')
                                                 <div class="modal-head">
                                                     <div>

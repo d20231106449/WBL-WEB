@@ -23,7 +23,7 @@
         <h2>Daftar sebagai pelajar</h2>
         <p class="form-intro">Isi maklumat berikut untuk mencipta akaun DapurLink KUO.</p>
         @include('partials.alerts')
-        <form method="POST" action="{{ route('register.store') }}" class="login-form">
+        <form method="POST" action="{{ route('register.store', [], false) }}" class="login-form">
             @csrf
             <label>Nama penuh<input class="@error('full_name') is-invalid @enderror" type="text" name="full_name" value="{{ old('full_name') }}" maxlength="120" placeholder="Nama seperti dalam rekod pelajar" required autofocus autocomplete="name">@error('full_name')<span class="field-error">{{ $message }}</span>@enderror</label>
             <label>Nombor telefon<input class="@error('phone_number') is-invalid @enderror" type="text" name="phone_number" value="{{ old('phone_number') }}" maxlength="30" placeholder="Contoh: 0123456789" required autocomplete="tel">@error('phone_number')<span class="field-error">{{ $message }}</span>@enderror</label>

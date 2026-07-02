@@ -3,7 +3,7 @@
 @section('content')
 <div class="user-page-title"><a href="{{ route('user.bookings') }}">&larr;</a><div><p>SELESAI MENGGUNAKAN DAPUR</p><h1>Sahkan selesai penggunaan</h1><span>Muat naik gambar dapur yang telah dibersihkan.</span></div></div>
 <div class="checkout-grid">
-<form method="POST" enctype="multipart/form-data" action="{{ route('user.checkout.store',$booking['id']) }}" class="user-form-card">@csrf
+<form method="POST" enctype="multipart/form-data" action="{{ route('user.checkout.store', $booking['id'], false) }}" class="user-form-card">@csrf
     <div class="checkout-summary"><span class="next-date"><strong>{{ \Illuminate\Support\Carbon::parse($booking['booking_date'])->format('d') }}</strong><small>{{ strtoupper(\Illuminate\Support\Carbon::parse($booking['booking_date'])->translatedFormat('M')) }}</small></span><div><strong>{{ $booking['purpose'] }}</strong><small>{{ substr($booking['start_time'],0,5) }} &ndash; {{ substr($booking['end_time'],0,5) }}</small></div></div>
     <label class="photo-upload @error('photo') is-invalid @enderror"><input type="file" name="photo" accept="image/jpeg,image/png,image/webp" required data-photo-input><span class="upload-icon">&#9638;</span><strong>Ambil atau pilih gambar</strong><small>JPG, PNG atau WebP &middot; maksimum 5 MB</small><img data-photo-preview alt="Pratonton gambar"></label>
     @error('photo')<span class="field-error">{{ $message }}</span>@enderror

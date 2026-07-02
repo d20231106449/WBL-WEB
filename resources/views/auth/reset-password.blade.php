@@ -24,7 +24,7 @@
         <p class="form-intro">Masukkan kata laluan baharu untuk akaun DapurLink anda.</p>
         @include('partials.alerts')
         <div class="alert error" role="alert" data-recovery-error hidden><span>!</span><p></p></div>
-        <form method="POST" action="{{ route('password.update') }}" class="login-form" data-recovery-form>
+        <form method="POST" action="{{ route('password.update', [], false) }}" class="login-form" data-recovery-form>
             @csrf
             <input type="hidden" name="access_token" data-recovery-token>
             <label>Kata laluan baharu

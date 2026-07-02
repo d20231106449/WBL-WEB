@@ -26,6 +26,6 @@
     <a href="{{ route('user.about') }}">Tentang laman sesawang <b>&rarr;</b></a>
     @if(session('profile.role')==='admin')<a href="{{ route('admin.dashboard') }}">Portal Pentadbir <b>&rarr;</b></a>@endif
 </section>
-<form method="POST" action="{{ route('logout') }}">@csrf<button class="logout-button">Log keluar</button></form>
+<form method="POST" action="{{ route('logout', [], false) }}">@csrf<button class="logout-button">Log keluar</button></form>
 </div>
 @endsection

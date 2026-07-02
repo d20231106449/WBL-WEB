@@ -2,7 +2,7 @@
 @section('title','Tukar kata laluan - DapurLink KUO')
 @section('content')
 <div class="user-page-title"><a href="{{ route('user.profile') }}">&larr;</a><div><p>KESELAMATAN</p><h1>Tukar kata laluan</h1><span>Gunakan kata laluan baharu untuk akaun DapurLink anda.</span></div></div>
-<form class="user-form-card" method="POST" action="{{ route('user.profile.password.update') }}">
+<form class="user-form-card" method="POST" action="{{ route('user.profile.password.update', [], false) }}">
     @csrf
     @method('PATCH')
     <label>Kata laluan semasa<input class="@error('current_password') is-invalid @enderror" type="password" name="current_password" required autocomplete="current-password">@error('current_password')<span class="field-error">{{ $message }}</span>@enderror</label>

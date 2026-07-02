@@ -29,7 +29,7 @@
         <div class="sidebar-user">
             <span class="avatar">{{ strtoupper(substr(session('profile.full_name', 'A'), 0, 1)) }}</span>
             <span class="user-copy"><strong>{{ session('profile.full_name', 'Pentadbir') }}</strong><small>{{ session('profile.email') }}</small></span>
-            <form method="POST" action="{{ route('logout') }}">@csrf<button class="icon-button" title="Log keluar">&nearr;</button></form>
+            <form method="POST" action="{{ route('logout', [], false) }}">@csrf<button class="icon-button" title="Log keluar">&nearr;</button></form>
         </div>
     </aside>
     <button class="sidebar-backdrop" type="button" data-sidebar-close aria-label="Tutup menu navigasi" tabindex="-1"></button>

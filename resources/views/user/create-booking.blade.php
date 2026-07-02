@@ -3,7 +3,7 @@
 @section('content')
 <div class="user-page-title"><a href="{{ route('user.dashboard') }}">&larr;</a><div><p>TEMPAHAN BAHARU</p><h1>Pilih waktu anda</h1><span>Setiap tempahan berlangsung selama satu jam.</span></div></div>
 <div class="booking-form-grid">
-<form class="user-form-card" method="POST" action="{{ route('user.bookings.store') }}" data-booking-form data-server-now="{{ now()->toIso8601String() }}" data-booked-slots-url="{{ route('user.bookings.slots') }}">@csrf
+<form class="user-form-card" method="POST" action="{{ route('user.bookings.store', [], false) }}" data-booking-form data-server-now="{{ now()->toIso8601String() }}" data-booked-slots-url="{{ route('user.bookings.slots', [], false) }}">@csrf
     <div class="form-section-title"><span>1</span><div><strong>Tarikh tempahan</strong><small>Pilih tarikh dalam 90 hari akan datang</small></div></div>
     <label>Tarikh pilihan<input class="@error('booking_date') is-invalid @enderror" type="date" name="booking_date" value="{{ old('booking_date', now()->toDateString()) }}" min="{{ now()->toDateString() }}" max="{{ now()->addDays(90)->toDateString() }}" data-booking-date required>@error('booking_date')<span class="field-error">{{ $message }}</span>@enderror</label>
     <div class="form-section-title"><span>2</span><div><strong>Waktu mula</strong><small>Dapur dibuka dari 8 pagi hingga 10 malam. Waktu yang telah berlalu dinyahaktifkan.</small></div></div>

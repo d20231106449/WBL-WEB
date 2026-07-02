@@ -2,7 +2,7 @@
 @section('title','Kemas kini profil - DapurLink KUO')
 @section('content')
 <div class="user-page-title"><a href="{{ route('user.profile') }}">&larr;</a><div><p>PROFIL</p><h1>Kemas kini profil</h1><span>Kemas kini maklumat akaun pelajar anda.</span></div></div>
-<form class="user-form-card" method="POST" action="{{ route('user.profile.update') }}">
+<form class="user-form-card" method="POST" action="{{ route('user.profile.update', [], false) }}">
     @csrf
     @method('PATCH')
     <label>Nama penuh<input class="@error('full_name') is-invalid @enderror" type="text" name="full_name" value="{{ old('full_name', session('profile.full_name')) }}" maxlength="120" required>@error('full_name')<span class="field-error">{{ $message }}</span>@enderror</label>
