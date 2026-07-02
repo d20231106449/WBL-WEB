@@ -44,9 +44,11 @@ RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autoload
 COPY . .
 COPY --from=assets /app/public/build ./public/build
 COPY docker/apache.conf /etc/apache2/sites-available/000-default.conf
+COPY docker/request-limits.conf /etc/apache2/conf-available/request-limits.conf
 COPY docker/render-entrypoint.sh /usr/local/bin/render-entrypoint
 
 RUN composer dump-autoload --optimize \
+    && a2enconf request-limits \
     && mkdir -p storage/app/public storage/framework/cache/data storage/framework/sessions storage/framework/testing storage/framework/views storage/logs bootstrap/cache \
     && chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R ug+rwx storage bootstrap/cache \
