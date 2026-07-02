@@ -30,7 +30,7 @@ services:
       - key: LOG_STACK
         value: stderr
       - key: SESSION_DRIVER
-        value: cookie
+        value: file
       - key: SESSION_SECURE_COOKIE
         value: "true"
       - key: CACHE_STORE
